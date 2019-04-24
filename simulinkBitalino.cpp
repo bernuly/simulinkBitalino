@@ -26,7 +26,7 @@
  * | See matlabroot/simulink/src/sfuntmpl_doc.c for a more detailed template |
  *  ------------------------------------------------------------------------- 
  *
- * Created: Mon Apr 22 14:54:44 2019
+ * Created: Wed Apr 24 14:49:22 2019
  */
 
 #define S_FUNCTION_LEVEL 2
@@ -88,7 +88,7 @@
 #define SFUNWIZ_GENERATE_TLC  0
 #define SOURCEFILES           "__SFB__simulinkBitalino_mycode.cpp__SFB__bitalino.cpp__SFB__c:\program Files\MATLAB\R2018b\sys\lcc64\lcc64\lib64\ws2_32.lib"
 #define PANELINDEX            8
-#define USE_SIMSTRUCT         0
+#define USE_SIMSTRUCT         1
 #define SHOW_COMPILE_STEPS    0
 #define CREATE_DEBUG_MEXFILE  0
 #define SAVE_CODE_ONLY        0
@@ -106,23 +106,27 @@
 extern void simulinkBitalino_Start_wrapper(real_T *xD,
 			void **pW,
 			const uint16_T *device, const int_T p_width0,
-			const uint16_T *samplingfrequency, const int_T p_width1);
+			const uint16_T *samplingfrequency, const int_T p_width1,
+			SimStruct *S);
 extern void simulinkBitalino_Outputs_wrapper(real_T *outputAnalog,
 			real_T *outputDigital,
 			const real_T *xD,
 			void **pW,
 			const uint16_T *device, const int_T p_width0,
-			const uint16_T *samplingfrequency, const int_T p_width1);
+			const uint16_T *samplingfrequency, const int_T p_width1,
+			SimStruct *S);
 extern void simulinkBitalino_Update_wrapper(real_T *outputAnalog,
 			real_T *outputDigital,
 			real_T *xD,
 			void **pW,
 			const uint16_T *device, const int_T p_width0,
-			const uint16_T *samplingfrequency, const int_T p_width1);
+			const uint16_T *samplingfrequency, const int_T p_width1,
+			SimStruct *S);
 extern void simulinkBitalino_Terminate_wrapper(real_T *xD,
 			void **pW,
 			const uint16_T *device, const int_T p_width0,
-			const uint16_T *samplingfrequency, const int_T p_width1);
+			const uint16_T *samplingfrequency, const int_T p_width1,
+			SimStruct *S);
 /*====================*
  * S-function methods *
  *====================*/
@@ -271,9 +275,6 @@ static void mdlSetDefaultPortDataTypes(SimStruct *S)
 static void mdlSetWorkWidths(SimStruct *S)
 {
 
-    const char_T *rtParamNames[] = {"P1","P2"};
-    ssRegAllTunableParamsAsRunTimeParams(S, rtParamNames);
-
 }
 
 #endif
@@ -295,7 +296,7 @@ static void mdlStart(SimStruct *S)
     const uint16_T *device = (const uint16_T *) mxGetData(PARAM_DEF0(S));
     const uint16_T *samplingfrequency = (const uint16_T *) mxGetData(PARAM_DEF1(S));
     
-    simulinkBitalino_Start_wrapper(xD, pW, device, p_width0, samplingfrequency, p_width1);
+    simulinkBitalino_Start_wrapper(xD, pW, device, p_width0, samplingfrequency, p_width1, S);
 }
 #endif /*  MDL_START */
 
@@ -313,7 +314,7 @@ static void mdlOutputs(SimStruct *S, int_T tid)
     const uint16_T *device = (const uint16_T *) mxGetData(PARAM_DEF0(S));
     const uint16_T *samplingfrequency = (const uint16_T *) mxGetData(PARAM_DEF1(S));
     
-    simulinkBitalino_Outputs_wrapper(outputAnalog, outputDigital, xD, pW, device, p_width0, samplingfrequency, p_width1);
+    simulinkBitalino_Outputs_wrapper(outputAnalog, outputDigital, xD, pW, device, p_width0, samplingfrequency, p_width1, S);
 
 }
 
@@ -337,7 +338,7 @@ static void mdlUpdate(SimStruct *S, int_T tid)
     const uint16_T *device = (const uint16_T *) mxGetData(PARAM_DEF0(S));
     const uint16_T *samplingfrequency = (const uint16_T *) mxGetData(PARAM_DEF1(S));
     
-    simulinkBitalino_Update_wrapper(outputAnalog, outputDigital, xD, pW, device, p_width0, samplingfrequency, p_width1);
+    simulinkBitalino_Update_wrapper(outputAnalog, outputDigital, xD, pW, device, p_width0, samplingfrequency, p_width1, S);
 
 }
 #endif /* MDL_UPDATE */
@@ -356,7 +357,7 @@ static void mdlTerminate(SimStruct *S)
     const uint16_T *device = (const uint16_T *) mxGetData(PARAM_DEF0(S));
     const uint16_T *samplingfrequency = (const uint16_T *) mxGetData(PARAM_DEF1(S));
     
-    simulinkBitalino_Terminate_wrapper(xD, pW, device, p_width0, samplingfrequency, p_width1);
+    simulinkBitalino_Terminate_wrapper(xD, pW, device, p_width0, samplingfrequency, p_width1, S);
 
 }
 

@@ -3,12 +3,7 @@
  * Include Files
  *
  */
-#if defined(MATLAB_MEX_FILE)
-#include "tmwtypes.h"
-#include "simstruc_types.h"
-#else
-#include "rtwtypes.h"
-#endif
+#include "simstruc.h"
 
 
 
@@ -28,10 +23,10 @@
 extern void myStart(real_T *xD,
 			void **pW,
 			const uint16_T *device, const int_T p_width0,
-			const uint16_T *samplingfrequency, const int_T p_width1);
+			const uint16_T *samplingfrequency, const int_T p_width1,
+                        SimStruct *S);
 
-extern void myUpdate(real_T *outputAnalog,
-			real_T *outputDigital,
+extern void myUpdate(real_T *outputAnalog, real_T *outputDigital,
 			real_T *xD,
 			void **pW,
 			const uint16_T *device, const int_T p_width0,
@@ -50,14 +45,15 @@ void myTerminate(real_T *xD,
 void simulinkBitalino_Start_wrapper(real_T *xD,
 			void **pW,
 			const uint16_T *device, const int_T p_width0,
-			const uint16_T *samplingfrequency, const int_T p_width1)
+			const uint16_T *samplingfrequency, const int_T p_width1,
+			SimStruct *S)
 {
 /* %%%-SFUNWIZ_wrapper_Start_Changes_BEGIN --- EDIT HERE TO _END */
 /*
  * Custom Start code goes here.
  */
 
-myStart(xD, pW, device, p_width0, samplingfrequency, p_width1);
+myStart(xD, pW, device, p_width0, samplingfrequency, p_width1, S);
 /* %%%-SFUNWIZ_wrapper_Start_Changes_END --- EDIT HERE TO _BEGIN */
 }
 /*
@@ -69,7 +65,8 @@ void simulinkBitalino_Outputs_wrapper(real_T *outputAnalog,
 			const real_T *xD,
 			void **pW,
 			const uint16_T *device, const int_T p_width0,
-			const uint16_T *samplingfrequency, const int_T p_width1)
+			const uint16_T *samplingfrequency, const int_T p_width1,
+			SimStruct *S)
 {
 /* %%%-SFUNWIZ_wrapper_Outputs_Changes_BEGIN --- EDIT HERE TO _END */
 /* This sample sets the output equal to the input
@@ -91,7 +88,8 @@ void simulinkBitalino_Update_wrapper(real_T *outputAnalog,
 			real_T *xD,
 			void **pW,
 			const uint16_T *device, const int_T p_width0,
-			const uint16_T *samplingfrequency, const int_T p_width1)
+			const uint16_T *samplingfrequency, const int_T p_width1,
+			SimStruct *S)
 {
 /* %%%-SFUNWIZ_wrapper_Update_Changes_BEGIN --- EDIT HERE TO _END */
 /*
@@ -109,7 +107,8 @@ myUpdate(outputAnalog, outputDigital, xD, pW, device, p_width0, samplingfrequenc
 void simulinkBitalino_Terminate_wrapper(real_T *xD,
 			void **pW,
 			const uint16_T *device, const int_T p_width0,
-			const uint16_T *samplingfrequency, const int_T p_width1)
+			const uint16_T *samplingfrequency, const int_T p_width1,
+			SimStruct *S)
 {
 /* %%%-SFUNWIZ_wrapper_Terminate_Changes_BEGIN --- EDIT HERE TO _END */
 /*

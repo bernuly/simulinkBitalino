@@ -1,4 +1,5 @@
 #include <mex.h>
+#include "simstruc.h"
 
 #include <string>
 #include <iostream>
@@ -26,15 +27,15 @@ std::string int_array_to_string(const uint16_T * int_array, int size_of_array) {
 void myStart(real_T *xD,
              void **pW,
              const uint16_T *device, const int_T p_width0,
-             const uint16_T *samplingfrequency, const int_T p_width1) {
+             const uint16_T *samplingfrequency, const int_T p_width1,
+             SimStruct *S) {
   try
     {
 
       std::string strDevice = int_array_to_string(device, p_width0);
         
-
       //std::string strDevice = "98:d3:31:b1:83:ea";  // "COM5" //PARAM
-      strDevice = "98:d3:31:b1:83:b0"; // "COM9"
+      // strDevice = "98:d3:31:b1:83:b0"; // "COM9"
 
       std::cerr << "Connecting to device \"" << strDevice << "\"" << std::endl;
 
@@ -67,16 +68,18 @@ void myStart(real_T *xD,
   catch(BITalino::Exception &e)
     {
       std::cerr << "BITalino exception: " << e.getDescription() << std::endl;
+      std::string strError = "BITalino error: " + std::string(e.getDescription());
+      ssSetErrorStatus(S,strError.c_str());
     }
   
 }
 
- void myUpdate(real_T *outputAnalog,
-			real_T *outputDigital,
-			real_T *xD,
-			void **pW,
-			const uint16_T *device, const int_T p_width0,
-                       const uint16_T *samplingfrequency, const int_T p_width1){
+void myUpdate(real_T *outputAnalog,
+              real_T *outputDigital,
+              real_T *xD,
+              void **pW,
+              const uint16_T *device, const int_T p_width0,
+              const uint16_T *samplingfrequency, const int_T p_width1){
 
   
   BITalino *dev = (BITalino *)pW[0];
@@ -86,22 +89,22 @@ void myStart(real_T *xD,
   const BITalino::Frame &f = frames[0];  // get a reference to the first frame of each 100 frames block
 
   /*
-  printf("%d : %d %d %d %d ; %d %d %d %d %d %d\n",   // dump the first frame
-         f.seq,
-         f.digital[0], f.digital[1], f.digital[2], f.digital[3],
-         f.analog[0], f.analog[1], f.analog[2], f.analog[3], f.analog[4], f.analog[5]);
+    printf("%d : %d %d %d %d ; %d %d %d %d %d %d\n",   // dump the first frame
+    f.seq,
+    f.digital[0], f.digital[1], f.digital[2], f.digital[3],
+    f.analog[0], f.analog[1], f.analog[2], f.analog[3], f.analog[4], f.analog[5]);
   */
 
   
   for(int i1=0; i1<iNrAnalogChannels; i1++){
-      outputAnalog[i1] = f.analog[i1];
+    outputAnalog[i1] = f.analog[i1];
   }
   
 
 
         
   for(int i1=0; i1<iNrDigitalChannels; i1++){
-      outputDigital[i1] = f.digital[i1];
+    outputDigital[i1] = f.digital[i1];
   }
   
 }
